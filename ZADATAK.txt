@@ -1,0 +1,1 @@
+Napravi i deployuj ERC20 token sa imenom i simbolom po zelji na base sepolia testnet, napravi test za pamentni ugovor koji obuhvate sve funckije ugovora (ide u test folder - gde je Lock.js trenutno), pametni ugovor stavi u `contracts` folder, verifikuj ugovor na blockexploreru (https://sepolia.basescan.org/) i posalji par tokena meni pitaj me za adresu na diskordu
