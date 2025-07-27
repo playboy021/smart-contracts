@@ -11,15 +11,12 @@ describe("Matic222 Token Contract", function () {
 
   let initialSupply; // Changed to let variable
 
-  beforeEach(async function () {
-    // Get the ContractFactory and Signers here
+    beforeEach(async function () {
     Matic222 = await ethers.getContractFactory("Matic222");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    // Pass simple number (1000000) instead of parsed units
-    matic222 = await Matic222.deploy(1000000); // Fixed deployment parameter
-    await matic222.deployed();
-  });
+    matic222 = await Matic222.deploy(1000000);
+    });
 
   describe("Deployment", function () {
     it("Should set the correct token name", async function () {
