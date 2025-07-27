@@ -9,7 +9,7 @@ describe("Matic222 Token Contract", function () {
   let addr2;
   let addrs;
 
-  const initialSupply = ethers.utils.parseUnits("1000000", 18); // 1,000,000 tokens
+  const initialSupply = ethers.utils.parseEther("1000000"); // 1,000,000 tokens (parseEther automatically uses 18 decimals)
 
   beforeEach(async function () {
     // Get the ContractFactory and Signers here
@@ -17,7 +17,7 @@ describe("Matic222 Token Contract", function () {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     // Deploy the contract with initial supply
-    matic222 = await Matic222.deploy(ethers.utils.parseUnits("1000000", 0)); // Input is 1,000,000
+    matic222 = await Matic222.deploy(1000000); // Input is 1,000,000
     await matic222.deployed();
   });
 
@@ -43,14 +43,14 @@ describe("Matic222 Token Contract", function () {
     it("Should correctly convert initialSupply parameter to token units", async function () {
       // We passed 1000000 in constructor which should be multiplied by 10^18
       const totalSupply = await matic222.totalSupply();
-      expect(totalSupply).to.equal(ethers.utils.parseUnits("1000000", 18));
+      expect(totalSupply).to.equal(ethers.utils.parseEther("1000000"));
     });
   });
 
   describe("Transactions", function () {
     it("Should transfer tokens between accounts", async function () {
       // Transfer 50 tokens from owner to addr1
-      const transferAmount = ethers.utils.parseUnits("50", 18);
+      const transferAmount = ethers.utils.parseEther("50");
       await expect(matic222.transfer(addr1.address, transferAmount))
         .to.emit(matic222, "Transfer")
         .withArgs(owner.address, addr1.address, transferAmount);
@@ -85,11 +85,11 @@ describe("Matic222 Token Contract", function () {
       const initialOwnerBalance = await matic222.balanceOf(owner.address);
 
       // Transfer 100 tokens from owner to addr1
-      const transferAmount1 = ethers.utils.parseUnits("100", 18);
+      const transferAmount1 = ethers.utils.parseEther("100");
       await matic222.transfer(addr1.address, transferAmount1);
 
       // Transfer another 50 tokens from owner to addr2
-      const transferAmount2 = ethers.utils.parseUnits("50", 18);
+      const transferAmount2 = ethers.utils.parseEther("50");
       await matic222.transfer(addr2.address, transferAmount2);
 
       // Check balances
@@ -108,7 +108,7 @@ describe("Matic222 Token Contract", function () {
 
   describe("Allowance", function () {
     it("Should approve tokens for delegated transfer", async function () {
-      const approveAmount = ethers.utils.parseUnits("100", 18);
+      const approveAmount = ethers.utils.parseEther("100");
       await expect(matic222.approve(addr1.address, approveAmount))
         .to.emit(matic222, "Approval")
         .withArgs(owner.address, addr1.address, approveAmount);
@@ -119,7 +119,7 @@ describe("Matic222 Token Contract", function () {
     });
 
     it("Should transfer tokens with transferFrom", async function () {
-      const transferAmount = ethers.utils.parseUnits("50", 18);
+      const transferAmount = ethers.utils.parseEther("50");
 
       // Owner approves addr1 to spend 50 tokens
       await matic222.approve(addr1.address, transferAmount);
@@ -145,10 +145,10 @@ describe("Matic222 Token Contract", function () {
     });
 
     it("Should fail transferFrom if allowance is insufficient", async function () {
-      const transferAmount = ethers.utils.parseUnits("100", 18);
+      const transferAmount = ethers.utils.parseEther("100");
 
       // Owner approves addr1 to spend 50 tokens
-      await matic222.approve(addr1.address, ethers.utils.parseUnits("50", 18));
+      await matic222.approve(addr1.address, ethers.utils.parseEther("50"));
 
       // Try to transfer 100 tokens (more than allowance)
       await expect(
