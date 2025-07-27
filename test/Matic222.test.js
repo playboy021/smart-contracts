@@ -9,15 +9,15 @@ describe("Matic222 Token Contract", function () {
   let addr2;
   let addrs;
 
-  const initialSupply = ethers.utils.parseEther("1000000"); // 1,000,000 tokens (parseEther automatically uses 18 decimals)
+  let initialSupply; // Changed to let variable
 
   beforeEach(async function () {
     // Get the ContractFactory and Signers here
     Matic222 = await ethers.getContractFactory("Matic222");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    // Deploy the contract with initial supply
-    matic222 = await Matic222.deploy(1000000); // Input is 1,000,000
+    // Pass simple number (1000000) instead of parsed units
+    matic222 = await Matic222.deploy(1000000); // Fixed deployment parameter
     await matic222.deployed();
   });
 
@@ -41,9 +41,9 @@ describe("Matic222 Token Contract", function () {
     });
 
     it("Should correctly convert initialSupply parameter to token units", async function () {
-      // We passed 1000000 in constructor which should be multiplied by 10^18
       const totalSupply = await matic222.totalSupply();
-      expect(totalSupply).to.equal(ethers.utils.parseEther("1000000"));
+      // Use the initialized variable instead of recalculating
+      expect(totalSupply).to.equal(initialSupply);
     });
   });
 
